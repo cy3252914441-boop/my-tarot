@@ -1,0 +1,16 @@
+{
+  "name": "星穹塔罗 · 私人牌室",
+  "short_name": "星穹塔罗",
+  "description": "在78张韦特体系塔罗牌中亲手抽取，探索象征、记录心情。仅供娱乐和自我反思。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080e1c",
+  "theme_color": "#0b1023",
+  "orientation": "any",
+  "icons": [
+    {"src":"./icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

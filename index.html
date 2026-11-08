@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1023">
+  <meta name="description" content="78张韦特体系塔罗牌，亲手抽牌、正逆位、牌义词典、记录与AI反思提示词。纯本地免费，支持离线。">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="星穹塔罗">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>星穹塔罗 · 你的私人牌室</title>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#draw" id="homeLink"><span class="brand-mark">✦</span><span>星穹<span class="gold">塔罗</span><small>CELESTIAL TAROT</small></span></a>
+    <nav class="tabs" aria-label="应用导航">
+      <button class="tab is-active" data-view="draw" type="button">抽牌</button>
+      <button class="tab" data-view="dictionary" type="button">牌义</button>
+      <button class="tab" data-view="history" type="button">记录</button>
+    </nav>
+  </header>
+  <main class="shell">
+    <section id="drawView" class="view is-active" aria-label="抽牌区">
+      <div class="hero">
+        <div class="star-crest" aria-hidden="true"><span>☾</span><span>✧</span><span>☼</span></div>
+        <p class="eyebrow">A MOMENT WITH YOURSELF</p>
+        <h1>在星光里，<em>看见另一种可能</em></h1>
+        <p class="hero-subtitle">不是预言未来，而是借牌面重新认识当下。</p>
+      </div>
+      <section class="panel setup" aria-labelledby="setupTitle">
+        <div class="panel-heading"><span class="heading-num">01</span><h2 id="setupTitle">写下你的问题</h2><span class="heading-line"></span></div>
+        <label for="question" class="field-label">今天想探索什么？</label>
+        <textarea id="question" rows="2" maxlength="240" placeholder="例如：我是否适合走项目管理的道路？"></textarea>
+        <p class="field-note">更适合提问“我需要关注什么”，而不是把结果当成必然的预言。</p>
+        <div class="setup-grid">
+          <div>
+            <span class="field-label">选择牌阵</span>
+            <div class="choice-group" id="spreadChoices" role="group" aria-label="牌阵">
+              <button class="choice" type="button" data-spread="1">单张<span>此刻指引</span></button>
+              <button class="choice is-active" type="button" data-spread="3">三张<span>过去 · 当下 · 下一步</span></button>
+              <button class="choice" type="button" data-spread="5">五张<span>深入探索</span></button>
+            </div>
+          </div>
+          <div>
+            <span class="field-label">方向设置</span>
+            <label class="toggle-row"><input type="checkbox" id="allowReverse" checked><span class="toggle-track"></span><span>允许正位与逆位<small>每次选牌随机决定方向</small></span></label>
+          </div>
+        </div>
+        <button class="primary-btn main-action" type="button" id="shuffleBtn"><span>✧</span> 洗牌并展开 78 张牌 <span class="arrow">↗</span></button>
+      </section>
+      <section class="panel deck-section is-hidden" id="deckSection" aria-labelledby="deckTitle">
+        <div class="panel-heading"><span class="heading-num">02</span><h2 id="deckTitle">亲手选牌</h2><span class="heading-line"></span></div>
+        <div class="deck-top"><p id="pickStatus" class="deck-intro">在牌背中挑选属于你的牌。</p><span class="count-chip"><strong id="pickedCount">0</strong> / <span id="requiredCount">3</span> 已抽取</span></div>
+        <div class="draw-progress"><span id="drawProgress"></span></div>
+        <div class="deck-hint"><span>✦</span> 78 张牌已经随机洗匀，请直接点选任意牌背。<span class="deck-swipe">向下滚动查看更多</span></div>
+        <div class="deck-grid" id="deckGrid" aria-label="78张洗乱的塔罗牌"></div>
+      </section>
+      <section class="panel result-section is-hidden" id="resultSection" aria-labelledby="resultTitle">
+        <div class="panel-heading"><span class="heading-num">03</span><h2 id="resultTitle">你的牌阵</h2><span class="heading-line"></span></div>
+        <p id="revealStatus" class="result-intro">点击选中的卡牌，逐张揭开牌面。</p>
+        <div id="spreadGrid" class="spread-grid"></div>
+        <div id="interpretation" class="interpretation"></div>
+        <div class="result-actions">
+          <button type="button" id="saveBtn" class="primary-btn">✧ 保存这次占卜</button>
+          <button type="button" id="copyBtn" class="outline-btn">⧉ 复制给 ChatGPT 解读</button>
+          <a class="outline-btn chatgpt-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">打开 ChatGPT ↗</a>
+        </div>
+      </section>
+    </section>
+    <section id="dictionaryView" class="view" aria-label="牌义词典">
+      <div class="inner-hero"><p class="eyebrow">78 CARDS · SYMBOLS & REFLECTION</p><h1>牌义<span class="gold">词典</span></h1><p>22张大阿尔卡纳与56张小阿尔卡纳，探索正逆位的不同提醒。</p></div>
+      <section class="panel">
+        <label for="searchCards" class="field-label">搜索牌名、英文或关键词</label>
+        <input id="searchCards" class="search-input" type="search" placeholder="例如：隐士、星币十、The Sun…">
+        <div class="filter-row" role="group" aria-label="牌义类别">
+          <button type="button" class="filter is-active" data-filter="all">全部 78</button>
+          <button type="button" class="filter" data-filter="major">大阿尔卡纳</button>
+          <button type="button" class="filter" data-filter="wands">权杖</button>
+          <button type="button" class="filter" data-filter="cups">圣杯</button>
+          <button type="button" class="filter" data-filter="swords">宝剑</button>
+          <button type="button" class="filter" data-filter="pentacles">星币</button>
+        </div>
+        <div class="dictionary-grid" id="dictionaryGrid"></div>
+      </section>
+    </section>
+    <section id="historyView" class="view" aria-label="历史记录">
+      <div class="inner-hero"><p class="eyebrow">YOUR PRIVATE JOURNAL</p><h1>星光<span class="gold">手札</span></h1><p>记录保存在此设备的浏览器中，无需注册、不上传云端。</p></div>
+      <section class="panel">
+        <div class="history-head"><span class="field-label">占卜历史</span><button id="clearHistoryBtn" class="text-btn" type="button">清空记录</button></div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </section>
+  </main>
+  <footer class="site-footer"><span>✦</span> 星穹塔罗 · 用于娱乐与自我反思，不具有科学预测能力，也不替代专业建议。<span>✦</span></footer>
+  <dialog id="detailDialog" class="detail-dialog" aria-label="牌义详细信息"><div id="detailContent"></div><button class="dialog-close" type="button" id="closeDialog" aria-label="关闭">×</button></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./cards.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
